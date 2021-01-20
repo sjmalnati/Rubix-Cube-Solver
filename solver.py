@@ -8,8 +8,12 @@
 
 def rotate(cube, turnType):
     if turnType == 'F':
-        #front turn
-        
+        #front
+        temp_side = [][]
+        for i,x in enumerate(cube[0]):
+            for j,y in enumerate(cube[0][i]):
+                temp_side[i][j] = cube[(2-j)%3][i]
+        temp_side = cube[0]
     if turnType == 'R':
         #right turn
     if turnType == 'L':
@@ -29,3 +33,4 @@ class create_cube():
 
 first=create_cube()
 print(first.cube)
+    return(cube)
