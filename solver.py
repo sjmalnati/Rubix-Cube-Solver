@@ -9,44 +9,59 @@ import numpy as np
 import copy
 
 def rotate(cube, turnType):
+    temp_cube = copy.deepcopy(cube)
     if turnType == 'F':
         #front
         main_face = 0
-
-        faces = [2,3,4,1]
-            
+        cube[2,2,:] = temp_cube[1,0,:]
+        cube[3,0,:] = temp_cube[2,2,:]
+        cube[4,0,:] = temp_cube[3,0,:]
+        cube[1,0,:] = temp_cube[4,0,:]
     if turnType == 'R':
         #right turn
         main_face = 1
+        cube[2,:,2] = temp_cube[0,:,2]
+        cube[5,:,2] = temp_cube[2,:,2]
+        cube[4,:,2] = temp_cube[5,:,2]
+        cube[0,:,2] = temp_cube[4,:,2]
     if turnType == 'L':
         #left turn
         main_face = 2
+        cube[2,:,0] = temp_cube[5,:,0]
+        cube[0,:,0] = temp_cube[2,:,0]
+        cube[4,:,0] = temp_cube[0,:,0]
+        cube[5,:,0] = temp_cube[4,:,0]
     if turnType == 'B':
         #back turn
         main_face = 3
+        cube[4,2,:] = temp_cube[1,2,:]
+        cube[3,2,:] = temp_cube[4,2,:]
+        cube[2,0,:] = temp_cube[3,2,:]
+        cube[1,2,:] = temp_cube[4,2,:]
     if turnType == 'U':
         #under turn
         main_face = 4
+        cube[0,2,:] = temp_cube[1,:,2]
+        cube[3,:,0] = temp_cube[0,2,:]
+        cube[5,0,:] = temp_cube[3,:,0]
+        cube[1,:,2] = temp_cube[5,0,:]
     if turnType == 'T':
         #top turn
         main_face = 5
+        cube[5,2,:] = temp_cube[1,:,0]
+        cube[3,:,2] = temp_cube[5,2,:]
+        cube[0,0,:] = temp_cube[3,:,2]
+        cube[1,:,0] = temp_cube[0,0,:]
     temp_side = np.zeros((3,3),dtype=int)
     for i,x in enumerate(cube[main_face]):
         for j,y in enumerate(cube[main_face][i]):
-            print(f'i:{i} j:{j} {(2-j)%3} face:{main_face}')
             temp_side[i][j] = cube[main_face][(2-j)%3][i]
     cube[main_face] = temp_side
-    temp_cube = copy.deepcopy(cube)
     #counter clockwise rotation?
     #cube[faces[0]][2][:] = temp_cube[faces[1]][:][2]
     #cube[faces[1]][:][0] = temp_cube[faces[2]][2][:]
     #cube[faces[2]][0][:] = temp_cube[faces[3]][:][0]
     #cube[faces[3]][:][2] = temp_cube[faces[0]][0][:]
-    
-    cube[faces[0],2,:] = temp_cube[faces[3],:,2]
-    cube[faces[1],:,0] = temp_cube[faces[0],2,:]
-    cube[faces[2],0,:] = temp_cube[faces[1],:,0]
-    cube[faces[3],:,2] = temp_cube[faces[2],0,:]
     
     return(cube)
 
@@ -63,10 +78,11 @@ first=create_cube()
 k = 0
 for i in range(3):
     for j in range(3):
-        first.cube[0][i][j] = k
+        first.cube[1][i][j] = k
         k+=1
 
 print(first.cube)
-first.cube = rotate(first.cube,'F')
+print('New')
+first.cube = rotate(first.cube,'R')
 print(first.cube)
 
