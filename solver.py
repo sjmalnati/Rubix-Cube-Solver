@@ -14,10 +14,10 @@ def rotate(cube, turnType):
     if turnType == 'F':
         #front
         main_face = 0
-        cube[2,2,:] = temp_cube[1,0,:]
-        cube[3,0,:] = temp_cube[2,2,:]
-        cube[4,0,:] = temp_cube[3,0,:]
-        cube[1,0,:] = temp_cube[4,0,:]
+        cube[2,2,:] = temp_cube[1,:,2]
+        cube[3,:,0] = temp_cube[2,2,:]
+        cube[4,0,:] = temp_cube[3,:,0]
+        cube[1,:,2] = temp_cube[4,0,:]
     if turnType == 'R':
         #right turn
         main_face = 1
@@ -27,32 +27,32 @@ def rotate(cube, turnType):
         cube[0,:,2] = temp_cube[4,:,2]
     if turnType == 'L':
         #left turn
-        main_face = 2
+        main_face = 3
         cube[2,:,0] = temp_cube[5,:,0]
         cube[0,:,0] = temp_cube[2,:,0]
         cube[4,:,0] = temp_cube[0,:,0]
         cube[5,:,0] = temp_cube[4,:,0]
     if turnType == 'B':
         #back turn
-        main_face = 3
-        cube[4,2,:] = temp_cube[1,2,:]
+        main_face = 5
+        cube[4,2,:] = temp_cube[1,:,0]
         cube[3,2,:] = temp_cube[4,2,:]
         cube[2,0,:] = temp_cube[3,2,:]
-        cube[1,2,:] = temp_cube[4,2,:]
+        cube[1,:,0] = temp_cube[2,0,:]
     if turnType == 'U':
         #under turn
         main_face = 4
-        cube[0,2,:] = temp_cube[1,:,2]
-        cube[3,:,0] = temp_cube[0,2,:]
-        cube[5,0,:] = temp_cube[3,:,0]
+        cube[0,2,:] = temp_cube[1,2,:]
+        cube[3,2,:] = temp_cube[0,2,:]
+        cube[5,0,:] = temp_cube[3,2,:]
         cube[1,:,2] = temp_cube[5,0,:]
     if turnType == 'T':
         #top turn
-        main_face = 5
-        cube[5,2,:] = temp_cube[1,:,0]
-        cube[3,:,2] = temp_cube[5,2,:]
-        cube[0,0,:] = temp_cube[3,:,2]
-        cube[1,:,0] = temp_cube[0,0,:]
+        main_face = 2
+        cube[5,2,:] = temp_cube[1,0,:]
+        cube[3,0,:] = temp_cube[5,2,:]
+        cube[0,0,:] = temp_cube[3,0,:]
+        cube[1,0,:] = temp_cube[0,0,:]
     temp_side = np.zeros((3,3),dtype=int)
     for i,x in enumerate(cube[main_face]):
         for j,y in enumerate(cube[main_face][i]):
@@ -68,8 +68,8 @@ def rotate(cube, turnType):
 
 def shuffle(cube):
     l=['F','B','R','L','T','U']
-    for x in range(10):
-        i = random.randint(0,6)
+    for x in range(20):
+        i = random.randint(0,5)
         cube=rotate(cube,l[i])
 
 
@@ -83,14 +83,9 @@ class create_cube():
         self.cube=temp
 
 first=create_cube()
-k = 0
-for i in range(3):
-    for j in range(3):
-        first.cube[1][i][j] = k
-        k+=1
-
 print(first.cube)
-print('New')
-first.cube = rotate(first.cube,'R')
+shuffle(first.cube)
+print('shuffled cube')
+#first.cube = rotate(first.cube,'R')
 print(first.cube)
 
