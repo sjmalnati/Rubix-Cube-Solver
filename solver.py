@@ -7,6 +7,7 @@
 #5 is Under
 import numpy as np
 import copy
+import random
 
 def rotate(cube, turnType):
     temp_cube = copy.deepcopy(cube)
@@ -64,6 +65,13 @@ def rotate(cube, turnType):
     #cube[faces[3]][:][2] = temp_cube[faces[0]][0][:]
     
     return(cube)
+
+def shuffle(cube):
+    l=['F','B','R','L','T','U']
+    for x in range(10):
+        i = random.randint(0,6)
+        cube=rotate(cube,l[i])
+
 
 class create_cube():
     def __init__(self):
