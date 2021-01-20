@@ -20,3 +20,12 @@ def rotate(cube, turnType):
         #under turn
     if turnType == 'T':
         #top turn
+
+#rubix cube solver
+
+class create_cube():
+    def __init__(self):
+        self.cube=[[[i]*3]*3 for i in range(6)]
+
+first=create_cube()
+print(first.cube)
