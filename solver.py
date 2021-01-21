@@ -80,6 +80,20 @@ class create_cube():
         for x in range(20):
             i = random.randint(0,5)
             self.cube=self.rotate(l[i])
+
+    def solve(cube):
+        #breadth first search
+        queue = []
+        queue.enqueue(cube)
+        l=['F','B','R','L','T','U']
+        solved = np.array([][][][][][])
+        while queue:
+            curr = queue.pop(0)
+            for t in l:
+                turn = rotate(t)
+                if turn == 
+                queue.enqueue(turn)
+                
 first=create_cube()
 print(first.cube)
 first.shuffle()
