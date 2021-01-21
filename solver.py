@@ -81,7 +81,7 @@ class create_cube():
             self.cube=self.rotate(self.cube,l[i])
             print('turn: ',l[i])
 
-    def solve(self):
+    def Breadth_solve(self):
         import time
         #breadth first search
         queue = []
