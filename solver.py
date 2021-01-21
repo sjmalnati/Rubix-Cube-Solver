@@ -18,8 +18,8 @@ class create_cube():
                     temp[i][j][k] = i
         self.cube=temp
     
-    def rotate(cube,turnType):
-        temp_cube = copy.deepcopy(self.cube)
+    def rotate(self,cube,turnType):
+        temp_cube = copy.deepcopy(cube)
         if turnType == 'F':
             #front
             main_face = 0
@@ -79,7 +79,7 @@ class create_cube():
         l=['F','B','R','L','T','U']
         for x in range(1):
             i = random.randint(0,5)
-            self.cube=self.rotate(l[i])
+            self.cube=self.rotate(self.cube,l[i])
 
     def solve(self):
         #breadth first search
@@ -92,8 +92,9 @@ class create_cube():
             curr = queue.pop(0)
             for t in l:
                 temp = copy.deepcopy(curr)
-                turn = rotate(curr,t)
+                turn = self.rotate(temp,t)
                 if (turn == solved).all():
+                    print(turn)
                     print('found solution')
                     return
                 queue.append(turn)
