@@ -9,6 +9,20 @@ import numpy as np
 import copy
 import random
 
+def solve(cube):
+    #breadth first search
+    queue = []
+    queue.enqueue(cube)
+    l=['F','B','R','L','T','U']
+    solved = np.array([][][][][][])
+    while queue:
+        curr = queue.pop(0)
+        for t in l:
+            turn = rotate(t)
+            if turn == 
+            queue.enqueue(turn)
+        
+
 def rotate(cube, turnType):
     temp_cube = copy.deepcopy(cube)
     if turnType == 'F':
@@ -85,6 +99,7 @@ class create_cube():
 first=create_cube()
 print(first.cube)
 shuffle(first.cube)
+solve(first.cube)
 print('shuffled cube')
 #first.cube = rotate(first.cube,'R')
 print(first.cube)
