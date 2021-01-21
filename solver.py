@@ -74,14 +74,16 @@ class create_cube():
         #cube[faces[3]][:][2] = temp_cube[faces[0]][0][:]
         
         return(cube)
-
     def shuffle(self):
         l=['F','B','R','L','T','U']
         for x in range(3):
             i = random.randint(0,5)
             self.cube=self.rotate(self.cube,l[i])
+            print('turn: ',l[i])
 
-    def bfs_solve(self):
+
+    def solve(self):
+        import time
         #breadth first search
         queue = []
         visited = {}
@@ -91,15 +93,27 @@ class create_cube():
         solved = solved.cube
         while queue:
             curr = queue.pop(0)
-            print(curr)
             for t in l:
                 temp = copy.deepcopy(curr)
                 turn = self.rotate(temp,t)
+                currhash=turn.tobytes()
+                #print('Turn: ',t)
+                #print(turn)
+                #time.sleep(5)
                 if (turn == solved).all():
+                    #print(turn)
                     print('found solution')
-                    print(turn)
-                    return
-                queue.append(turn)
+                    self.cube=turn
+                    return 
+                if(currhash not in visited):
+                    queue.append(turn)
+                else:
+                    pass
+                    #print('Turn: ',t)
+                    #print(turn)
+                    #time.sleep(5)
+                    #print(visited)
+                visited[currhash]=1
         return
                 
 first=create_cube()
@@ -108,4 +122,5 @@ first.shuffle()
 print('shuffled cube')
 #first.cube = rotate(first.cube,'R')
 print(first.cube)
-first.bfs_solve()
+first.solve()
+print(first.cube)
