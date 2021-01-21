@@ -77,29 +77,33 @@ class create_cube():
 
     def shuffle(self):
         l=['F','B','R','L','T','U']
-        for x in range(20):
+        for x in range(1):
             i = random.randint(0,5)
             self.cube=self.rotate(l[i])
-    
-    def solve(cube):
+
+    def solve(self):
         #breadth first search
         queue = []
-        queue.enqueue(cube)
+        queue.append(self.cube)
         l=['F','B','R','L','T','U']
         solved = create_cube()
-        solved=solved.cube
+        solved = solved.cube
         while queue:
             curr = queue.pop(0)
             for t in l:
-                turn = rotate(t)
-                if turn == solved
-                    return 
-                queue.enqueue(turn)
-
+                temp = copy.deepcopy(curr)
+                turn = rotate(curr,t)
+                if (turn == solved).all():
+                    print('found solution')
+                    return
+                queue.append(turn)
+        return
+                
 first=create_cube()
 print(first.cube)
 first.shuffle()
 print('shuffled cube')
 #first.cube = rotate(first.cube,'R')
 print(first.cube)
+first.solve()
 
