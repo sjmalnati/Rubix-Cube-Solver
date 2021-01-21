@@ -77,25 +77,27 @@ class create_cube():
 
     def shuffle(self):
         l=['F','B','R','L','T','U']
-        for x in range(1):
+        for x in range(3):
             i = random.randint(0,5)
             self.cube=self.rotate(self.cube,l[i])
 
-    def solve(self):
+    def bfs_solve(self):
         #breadth first search
         queue = []
+        visited = {}
         queue.append(self.cube)
         l=['F','B','R','L','T','U']
         solved = create_cube()
         solved = solved.cube
         while queue:
             curr = queue.pop(0)
+            print(curr)
             for t in l:
                 temp = copy.deepcopy(curr)
                 turn = self.rotate(temp,t)
                 if (turn == solved).all():
-                    print(turn)
                     print('found solution')
+                    print(turn)
                     return
                 queue.append(turn)
         return
@@ -106,5 +108,4 @@ first.shuffle()
 print('shuffled cube')
 #first.cube = rotate(first.cube,'R')
 print(first.cube)
-first.solve()
-
+first.bfs_solve()
