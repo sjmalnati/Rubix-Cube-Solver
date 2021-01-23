@@ -17,7 +17,10 @@ class create_cube():
                 for k in range(3):
                     temp[i][j][k] = i
         self.cube=temp
-    
+    def moves(self,cube,turnType,times):
+        for i in range(times):
+            cube=self.rotate(cube,turnType)
+        return cube
     def rotate(self,cube,turnType):
         temp_cube = copy.deepcopy(cube)
         if turnType == 'F':
@@ -139,24 +142,34 @@ class create_cube():
     
     def create_tests(self,n):
         tests=[]
+        moves=[]
         level=[]
         i=0
         tests.append([create_cube().cube])
+        moves.append([''])
         l=['F','B','R','L','T','U']
         visited = {}
+        currhash=tests[0][0].tobytes()
+        visited[currhash]=1
         for testcase in range(1,n+1):
             tests.append([])
-            for subcase in tests[i]:
-                currhash=subcase.tobytes()
-                visited[currhash]=1
+            moves.append([])
+            for index,subcase in enumerate(tests[i]): 
+            #for subcase in tests[i]:
+                #currhash=subcase.tobytes()
+                #visited[currhash]=1
                 for turn in l:
-                    temp = copy.deepcopy(subcase)
-                    temp = self.rotate(temp,turn)
-                    currhash=temp.tobytes()
-                    if(currhash not in visited):
-                        tests[i+1].append(temp)
-                    
+                    for times in range(1,4):
+                        temp = copy.deepcopy(subcase)
+                        temp = self.moves(temp,turn,times)
+                        currhash=temp.tobytes()
+                        if(currhash not in visited):
+                            tests[i+1].append(temp)
+                            moves[i+1].append(f'{moves[i][index]}{turn}{times}')
+                            #currhash=temp.tobytes()
+                            visited[currhash]=1
             i+=1
+        print(moves[2])
         return tests    
 '''
 first=create_cube()
@@ -176,11 +189,16 @@ print(first.cube)
 first.Breadth_solve()
 print(first.cube)
 '''
-first=create_cube()
-second = create_cube()
-#test=first.create_tests(5)
-#print(len(test[5]))
-print(first.rotate(first.cube,'F'))
-#print(first.rotate(first.cube,'U'))
-#second.rotate(second.cube,'U')
-print(second.rotate(second.cube,'B'))
+
+test=first.create_tests(2)
+second=create_cube()
+temp = second.rotate(second.cube,'F')
+temp= second.moves(temp,'F',3)
+#print(str(temp))
+if(first.cube.tobytes() == temp.tobytes()):
+    print('yes')
+dic={}
+dic[first.cube.tobytes()]=1
+if temp.tobytes() not in dic:
+    print('dictionary works')
+print(len(test[2]))
