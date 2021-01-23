@@ -17,7 +17,10 @@ class create_cube():
                 for k in range(3):
                     temp[i][j][k] = i
         self.cube=temp
-    
+    def moves(self,cube,turnType,times):
+        for i in range(times):
+            cube=self.rotate(cube,turnType)
+        return cube
     def rotate(self,cube,turnType):
         temp_cube = copy.deepcopy(cube)
         if turnType == 'F':
@@ -45,8 +48,8 @@ class create_cube():
             #back turn
             main_face = 5
             cube[4,2,:] = temp_cube[1,:,0]
-            cube[3,2,:] = temp_cube[4,2,:]
-            cube[2,0,:] = temp_cube[3,2,:]
+            cube[3,:,2] = temp_cube[4,2,:]
+            cube[2,0,:] = temp_cube[3,:,2]
             cube[1,:,0] = temp_cube[2,0,:]
         if turnType == 'U':
             #under turn
@@ -54,7 +57,7 @@ class create_cube():
             cube[0,2,:] = temp_cube[1,2,:]
             cube[3,2,:] = temp_cube[0,2,:]
             cube[5,0,:] = temp_cube[3,2,:]
-            cube[1,:,2] = temp_cube[5,0,:]
+            cube[1,2,:] = temp_cube[5,0,:]
         if turnType == 'T':
             #top turn
             main_face = 2
@@ -139,24 +142,34 @@ class create_cube():
     
     def create_tests(self,n):
         tests=[]
+        moves=[]
         level=[]
         i=0
         tests.append([create_cube().cube])
+        moves.append([''])
         l=['F','B','R','L','T','U']
         visited = {}
+        currhash=tests[0][0].tobytes()
+        visited[currhash]=1
         for testcase in range(1,n+1):
             tests.append([])
-            for subcase in tests[i]:
-                currhash=subcase.tobytes()
-                visited[currhash]=1
+            moves.append([])
+            for index,subcase in enumerate(tests[i]): 
+            #for subcase in tests[i]:
+                #currhash=subcase.tobytes()
+                #visited[currhash]=1
                 for turn in l:
-                    temp = copy.deepcopy(subcase)
-                    temp = self.rotate(temp,turn)
-                    currhash=temp.tobytes()
-                    if(currhash not in visited):
-                        tests[i+1].append(temp)
-                    
+                    for times in range(1,4):
+                        temp = copy.deepcopy(subcase)
+                        temp = self.moves(temp,turn,times)
+                        currhash=temp.tobytes()
+                        if(currhash not in visited):
+                            tests[i+1].append(temp)
+                            moves[i+1].append(f'{moves[i][index]}{turn}{times}')
+                            #currhash=temp.tobytes()
+                            visited[currhash]=1
             i+=1
+        print(moves[2])
         return tests    
 '''
 first=create_cube()
@@ -177,5 +190,15 @@ first.Breadth_solve()
 print(first.cube)
 '''
 first=create_cube()
-test=first.create_tests(3)
-print(len(test[3]))
+test=first.create_tests(2)
+second=create_cube()
+temp = second.rotate(second.cube,'F')
+temp= second.moves(temp,'F',3)
+#print(str(temp))
+if(first.cube.tobytes() == temp.tobytes()):
+    print('yes')
+dic={}
+dic[first.cube.tobytes()]=1
+if temp.tobytes() not in dic:
+    print('dictionary works')
+print(len(test[2]))
