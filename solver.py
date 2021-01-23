@@ -81,8 +81,7 @@ class create_cube():
             self.cube=self.rotate(self.cube,l[i])
             print('turn: ',l[i])
 
-
-    def solve(self):
+    def Breadth_solve(self):
         import time
         #breadth first search
         queue = []
@@ -115,12 +114,35 @@ class create_cube():
                     #print(visited)
                 visited[currhash]=1
         return
+    def metric(self,cube):
+        dist = 0
+        for face in cube:
+            vect1 = [1,0,-1]
+            vect2 = [1,-1,0]
+            vect3 = [0,1,-1]
+            for row in face:
+                if not row.dot(vect1) == 0:
+                    dist+=1
+                if not row.dot(vect2) == 0:
+                    dist+=1
+                if not row.dot(vect3) == 0:
+                    dist+=1
+            for col in face.T:
+                if not col.dot(vect1) == 0:
+                    dist+=1
+                if not col.dot(vect2) == 0:
+                    dist+=1
+                if not col.dot(vect3) == 0:
+                    dist+=1
+        return(dist)
+            
                 
 first=create_cube()
-print(first.cube)
+#print(first.cube)
 first.shuffle()
-print('shuffled cube')
+print(first.metric(first.cube))
+#print('shuffled cube')
 #first.cube = rotate(first.cube,'R')
-print(first.cube)
-first.solve()
-print(first.cube)
+#print(first.cube)
+#first.Breadth_solve()
+#print(first.cube)
