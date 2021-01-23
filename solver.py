@@ -96,9 +96,7 @@ class create_cube():
                 temp = copy.deepcopy(curr)
                 turn = self.rotate(temp,t)
                 currhash=turn.tobytes()
-                #print('Turn: ',t)
-                #print(turn)
-                #time.sleep(5)
+                
                 if (turn == solved).all():
                     #print(turn)
                     print('found solution')
@@ -106,6 +104,7 @@ class create_cube():
                     return 
                 if(currhash not in visited):
                     queue.append(turn)
+                    
                 else:
                     pass
                     #print('Turn: ',t)
@@ -137,6 +136,29 @@ class create_cube():
         return(dist)
             
                 
+    
+    def create_tests(self,n):
+        tests=[]
+        level=[]
+        i=0
+        tests.append([create_cube().cube])
+        l=['F','B','R','L','T','U']
+        visited = {}
+        for testcase in range(1,n+1):
+            tests.append([])
+            for subcase in tests[i]:
+                currhash=subcase.tobytes()
+                visited[currhash]=1
+                for turn in l:
+                    temp = copy.deepcopy(subcase)
+                    temp = self.rotate(temp,turn)
+                    currhash=temp.tobytes()
+                    if(currhash not in visited):
+                        tests[i+1].append(temp)
+                    
+            i+=1
+        return tests    
+'''
 first=create_cube()
 #print(first.cube)
 first.shuffle()
@@ -149,3 +171,11 @@ print(first.cube)
 #print(first.cube)
 #first.Breadth_solve()
 #print(first.cube)
+print('shuffled cube')
+print(first.cube)
+first.Breadth_solve()
+print(first.cube)
+'''
+first=create_cube()
+test=first.create_tests(3)
+print(len(test[3]))
