@@ -45,8 +45,8 @@ class create_cube():
             #back turn
             main_face = 5
             cube[4,2,:] = temp_cube[1,:,0]
-            cube[3,2,:] = temp_cube[4,2,:]
-            cube[2,0,:] = temp_cube[3,2,:]
+            cube[3,:,2] = temp_cube[4,2,:]
+            cube[2,0,:] = temp_cube[3,:,2]
             cube[1,:,0] = temp_cube[2,0,:]
         if turnType == 'U':
             #under turn
@@ -54,7 +54,7 @@ class create_cube():
             cube[0,2,:] = temp_cube[1,2,:]
             cube[3,2,:] = temp_cube[0,2,:]
             cube[5,0,:] = temp_cube[3,2,:]
-            cube[1,:,2] = temp_cube[5,0,:]
+            cube[1,2,:] = temp_cube[5,0,:]
         if turnType == 'T':
             #top turn
             main_face = 2
@@ -177,5 +177,10 @@ first.Breadth_solve()
 print(first.cube)
 '''
 first=create_cube()
-test=first.create_tests(3)
-print(len(test[3]))
+second = create_cube()
+#test=first.create_tests(5)
+#print(len(test[5]))
+print(first.rotate(first.cube,'F'))
+#print(first.rotate(first.cube,'U'))
+#second.rotate(second.cube,'U')
+print(second.rotate(second.cube,'B'))
