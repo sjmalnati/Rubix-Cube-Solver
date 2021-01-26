@@ -8,6 +8,7 @@
 import numpy as np
 import copy
 import random
+import heapq
 
 class create_cube():
     def __init__(self):
@@ -79,13 +80,12 @@ class create_cube():
         return(cube)
     def shuffle(self):
         l=['F','B','R','L','T','U']
-        for x in range(3):
+        for x in range(5):
             i = random.randint(0,5)
             self.cube=self.rotate(self.cube,l[i])
             print('turn: ',l[i])
 
     def Breadth_solve(self):
-        import time
         #breadth first search
         queue = []
         visited = {}
@@ -96,26 +96,66 @@ class create_cube():
         while queue:
             curr = queue.pop(0)
             for t in l:
-                temp = copy.deepcopy(curr)
-                turn = self.rotate(temp,t)
-                currhash=turn.tobytes()
-                
-                if (turn == solved).all():
-                    #print(turn)
-                    print('found solution')
-                    self.cube=turn
-                    return 
-                if(currhash not in visited):
-                    queue.append(turn)
+                for i in range(1,4):
+                    temp = copy.deepcopy(curr)
+                    turn = self.moves(temp,t,i)
+                    currhash=turn.tobytes()
                     
-                else:
-                    pass
-                    #print('Turn: ',t)
-                    #print(turn)
-                    #time.sleep(5)
-                    #print(visited)
-                visited[currhash]=1
+                    if (turn == solved).all():
+                        #print(turn)
+                        print('found solution')
+                        self.cube=turn
+                        return 
+                    if(currhash not in visited):
+                        queue.append(turn)
+                        
+                    else:
+                        pass
+                        #print('Turn: ',t)
+                        #print(turn)
+                        #time.sleep(5)
+                        #print(visited)
+                    visited[currhash]=1
         return
+    def bibfs(self):
+        import time
+        #bidirectional breadth first search
+        queue = []
+        queue2 = []
+        visited = {}
+        queue.append(self.cube)
+        l=['F','B','R','L','T','U']
+        solved = create_cube()
+        solved = solved.cube
+        queue2.append(solved)
+        while queue:
+            curr = queue.pop(0)
+            curr2 = queue2.pop(0)
+            for t in l:
+                for i in range(1,4):
+                    temp = copy.deepcopy(curr)
+                    turn = self.moves(temp,t,i)
+                    currhash=turn.tobytes()
+                    
+                    if (turn == solved).all():
+                        #print(turn)
+                        print('found solution')
+                        self.cube=turn
+                        return 
+                    if(currhash not in visited):
+                        queue.append(turn)
+                    visited[currhash]=1
+                    #other way
+                    temp = copy.deepcopy(curr2)
+                    turn = self.moves(temp,t,i)
+                    currhash = turn.tobytes()
+                    if(currhash in visited):
+                        print('found solution: connected')
+                        return
+                    else:
+                        queue2.append(turn)
+        return
+    
     def metric(self,cube):
         dist = 0
         for face in cube:
@@ -123,18 +163,18 @@ class create_cube():
             vect2 = [1,-1,0]
             vect3 = [0,1,-1]
             for row in face:
-                if not row.dot(vect1) == 0:
+                if not (row+1).dot(vect1) == 0:
                     dist+=1
-                if not row.dot(vect2) == 0:
+                if not (row+1).dot(vect2) == 0:
                     dist+=1
-                if not row.dot(vect3) == 0:
+                if not (row+1).dot(vect3) == 0:
                     dist+=1
             for col in face.T:
-                if not col.dot(vect1) == 0:
+                if not (col+1).dot(vect1) == 0:
                     dist+=1
-                if not col.dot(vect2) == 0:
+                if not (col+1).dot(vect2) == 0:
                     dist+=1
-                if not col.dot(vect3) == 0:
+                if not (col+1).dot(vect3) == 0:
                     dist+=1
         return(dist)
             
@@ -170,7 +210,39 @@ class create_cube():
                             visited[currhash]=1
             i+=1
         print(moves[2])
-        return tests    
+        return tests
+
+    def astar(self): #A*
+        heap = []
+        visited = {}
+        heapq.heappush(heap,(0,-1,self.cube))
+        l=['F','B','R','L','T','U']
+        solved = create_cube()
+        solved = solved.cube
+        tiebreak = 0
+        level = 0
+        while heap:
+            h = heapq.heappop(heap)
+            curr = h[2]
+            for t in l:
+                for i in range(1,4):
+                    temp = copy.deepcopy(curr)
+                    turn = self.moves(temp,t,i)
+                    currhash=turn.tobytes()
+                    
+                    if (turn == solved).all():
+                        #print(turn)
+                        print('found solution')
+                        self.cube=turn
+                        return 
+                    if(currhash not in visited):
+                        m = self.metric(turn)
+                        if level%200 == 0:
+                            print(m)
+                        level+=1
+                        heapq.heappush(heap,(m,tiebreak,turn))
+                        tiebreak+=1
+                    visited[currhash]=1
 '''
 first=create_cube()
 #print(first.cube)
@@ -190,15 +262,7 @@ first.Breadth_solve()
 print(first.cube)
 '''
 
-test=first.create_tests(2)
-second=create_cube()
-temp = second.rotate(second.cube,'F')
-temp= second.moves(temp,'F',3)
-#print(str(temp))
-if(first.cube.tobytes() == temp.tobytes()):
-    print('yes')
-dic={}
-dic[first.cube.tobytes()]=1
-if temp.tobytes() not in dic:
-    print('dictionary works')
-print(len(test[2]))
+first = create_cube()
+first.shuffle()
+first.astar()
+
