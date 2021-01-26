@@ -80,7 +80,7 @@ class create_cube():
         return(cube)
     def shuffle(self):
         l=['F','B','R','L','T','U']
-        for x in range(5):
+        for x in range(10):
             i = random.randint(0,5)
             self.cube=self.rotate(self.cube,l[i])
             print('turn: ',l[i])
@@ -214,8 +214,10 @@ class create_cube():
 
     def astar(self): #A*
         heap = []
+        moves = []
         visited = {}
         heapq.heappush(heap,(0,-1,self.cube))
+        heapq.heappush(moves,(0,-1,''))
         l=['F','B','R','L','T','U']
         solved = create_cube()
         solved = solved.cube
@@ -223,8 +225,13 @@ class create_cube():
         level = 0
         while heap:
             h = heapq.heappop(heap)
+            move = heapq.heappop(moves)[2]
+            #heap = []
+            #moves = []
             curr = h[2]
             for t in l:
+                if(len(move) >= 2 and t == move[-2]):
+                    continue
                 for i in range(1,4):
                     temp = copy.deepcopy(curr)
                     turn = self.moves(temp,t,i)
@@ -232,6 +239,7 @@ class create_cube():
                     
                     if (turn == solved).all():
                         #print(turn)
+                        print(move)
                         print('found solution')
                         self.cube=turn
                         return 
@@ -239,8 +247,10 @@ class create_cube():
                         m = self.metric(turn)
                         if level%200 == 0:
                             print(m)
+                            print(move)
                         level+=1
                         heapq.heappush(heap,(m,tiebreak,turn))
+                        heapq.heappush(moves,(m,tiebreak,f'{move}{t}{i}'))
                         tiebreak+=1
                     visited[currhash]=1
 '''
